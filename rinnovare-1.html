@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rinnovare • Sugeridor de Sistema Fotovoltaico</title>
+
+  <style>
+    :root{
+      /* Paleta baseada na logo */
+      --green-dark: #44842A;
+      --green: #51BA20;
+      --green-soft: #8CD869;
+      --mint: #E4F4DD;
+
+      --gray-900:#1b1b1b;
+      --gray-700:#5F5F5F;
+      --gray-200:#E9EDF0;
+
+      --bg:#ffffff;
+      --card:#ffffff;
+      --border: rgba(0,0,0,.08);
+      --shadow: 0 10px 26px rgba(0,0,0,.08);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+  margin: 0;
+  padding: 0;              /* garante zero empurrão */
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #fbfffa 40%,
+    #ffffff 100%
+  );
+  color: var(--gray-900);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* centraliza horizontal */
+}
+
+    .topbar{
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+
+    /* FORÇA REAL DE TAMANHO DA LOGO */
+/* ====== FORÇA BARRA + LOGO (RINNOVARE) ====== */
+.topbar{
+  margin-top: 60px;   /* <<< desce tudo (logo + barra se tiver) */
+}
+
+
+.logo{
+  height:600px !important;   /* aumenta a logo */
+  width:auto !important;
+  display:block !important;
+}
+
+
+
+
+    .card{
+      margin-top: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    h1{ margin:0 0 6px; font-size: 20px; }
+    .muted{ margin:0 0 16px; color: rgba(0,0,0,.62); line-height:1.35; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 920px){ .grid{ grid-template-columns:1fr; } }
+
+    label{ display:block; font-size: 13px; margin-bottom: 6px; color: rgba(0,0,0,.75); }
+
+    input, select, textarea{
+      width:100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border:1px solid rgba(0,0,0,.14);
+      background:#fff;
+      color: var(--gray-900);
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(81,186,32,.75);
+      box-shadow: 0 0 0 4px rgba(81,186,32,.12);
+    }
+
+    .small{ font-size: 12px; color: rgba(0,0,0,.55); margin-top: 6px; }
+
+    .actions{ display:flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+
+    button{
+      cursor:pointer;
+      padding: 12px 14px;
+      border: 0;
+      border-radius: 12px;
+      font-weight: 800;
+      background: linear-gradient(180deg, var(--green) 0%, var(--green-dark) 100%);
+      color: #fff;
+      box-shadow: 0 10px 18px rgba(68,132,42,.18);
+    }
+    button.secondary{
+      background: #fff;
+      color: var(--green-dark);
+      border: 1px solid rgba(81,186,32,.35);
+      box-shadow: none;
+      font-weight: 800;
+    }
+
+    .out{
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(228,244,221,.55) 0%, rgba(255,255,255,.9) 100%);
+      border: 1px solid rgba(81,186,32,.22);
+    }
+
+    .tag{
+      display:inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(81,186,32,.10);
+      border:1px solid rgba(81,186,32,.25);
+      color: var(--green-dark);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .kpi{ display:grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-top: 12px; }
+    @media (max-width: 920px){ .kpi{ grid-template-columns:1fr 1fr; } }
+
+    .k{
+      padding: 12px;
+      border-radius: 14px;
+      background: #fff;
+      border:1px solid rgba(0,0,0,.08);
+    }
+    .k .t{ font-size: 12px; color: rgba(0,0,0,.55); }
+    .k .v{ font-size: 18px; font-weight: 900; margin-top: 4px; color: var(--gray-900); }
+
+    .pill{ display:flex; gap:10px; flex-wrap: wrap; margin-top: 10px; }
+    .pill > div{
+      padding: 12px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.08);
+      flex: 1;
+      min-width: 280px;
+    }
+    .pill h3{ margin: 0 0 8px; font-size: 14px; }
+    .line{ font-size: 13px; margin: 5px 0; color: rgba(0,0,0,.78); }
+    .sub{ font-size: 12px; color: rgba(0,0,0,.55); margin-top: 8px; }
+
+    .ok{ color: #0a7b2b; font-weight: 900; }
+    .bad{ color: #a06b00; font-weight: 900; }
+
+    .warn{
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgba(0,0,0,.62);
+      line-height: 1.35;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <!-- Topo com logo e barra verde -->
+    <div class="topbar">
+      <img class="logo" alt="Rinnovare Solar"
+        src="rinnovare.png"
+      />
+      <div class="brandline" aria-hidden="true"></div>
+    </div>
+
+    <div class="card">
+      <h1>Pré-dimensionamento comercial — Sistema Fotovoltaico</h1>
+      <p class="muted">
+        Preencha o <b>consumo mensal (kWh)</b> e dados básicos. O sistema retorna <b>duas opções</b>
+        (placas de <b>700 Wp</b> e <b>600 Wp</b>) para facilitar a decisão conforme o telhado.
+      </p>
+
+      <div class="grid">
+        <div>
+          <label>Consumo mensal do cliente (kWh/mês)</label>
+          <input id="kwhMonth" type="number" min="1" step="1" placeholder="Ex.: 450" />
+          <div class="small">Use o kWh da conta (melhor do que valor em R$ por causa de parcelamento/taxas).</div>
+        </div>
+
+        <div>
+          <label>Percentual de compensação desejada</label>
+          <select id="offset">
+    
+            <option value= selected>0</option>
+            <
+          </select>
+        </div>
+
+        <div>
+          <label>Orientaçao de instalação das placas — escolha rápida</label>
+          <select id="hsp">
+            <option value="3.7">SUL (≈ 3,7 h/dia)</option>
+            <option value="4.2" selected>LESTE/OESTE (≈ 4,2 h/dia)</option>
+            <option value="5.0">NORTE (≈ 5,0 h/dia)</option>
+          </select>
+          <div class="small">Se estiver em dúvida, deixe em “Média”.</div>
+        </div>
+
+        <div>
+          <label>Reserva extra (sombras, sujeira, perdas)</label>
+          <select id="reserve">
+            <option value="0.00" selected>0%</option>
+            <option value="0.05">5%</option>
+            <option value="0.10">10%</option>
+            <option value="0.15">15%</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Tensão da rede do cliente</label>
+          <select id="voltage">
+            <option value="127">127 V</option>
+            <option value="220" selected>220 V</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Disjuntor geral (A)</label>
+          <input id="mainBreaker" type="number" min="1" step="1" placeholder="Ex.: 50" />
+        </div>
+
+        <div>
+          <label>Bitola do cabo atual (mm²)</label>
+          <select id="cable">
+            <option value="2.5">2,5 mm²</option>
+            <option value="4">4 mm²</option>
+            <option value="6" selected>6 mm²</option>
+            <option value="10">10 mm²</option>
+            <option value="16">16 mm²</option>
+            <option value="25">25 mm²</option>
+            <option value="35">35 mm²</option>
+            <option value="50">50 mm²</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Nome do cliente (opcional)</label>
+          <input id="clientName" type="text" placeholder="Ex.: Sr. João" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="calcBtn">Calcular sugestão</button>
+        <button class="secondary" id="copyBtn" type="button" style="display:none;">Copiar texto WhatsApp</button>
+        <button class="secondary" id="clearBtn" type="button">Limpar</button>
+      </div>
+
+      <div class="out" id="output" style="display:none;"></div>
+
+      <div class="warn">
+        <span class="tag">Aviso</span>
+        Pré-dimensionamento comercial. Projeto final deve ser validado conforme <b>NBR 5410</b> e padrão da concessionária
+        (método de instalação, distância, queda de tensão, temperatura, agrupamento etc.).
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Premissas (ajustáveis)
+    const PR = 0.78;
+    const PF = 0.98;
+    const MODULES = [700, 600];
+
+    const cableAmpacity = {
+      "2.5": 21, "4": 28, "6": 36, "10": 50, "16": 68, "25": 89, "35": 110, "50": 140
+    };
+
+    const inverterSizes = [1.5, 2, 3, 3.6, 4, 5, 6, 7.5, 8, 10, 12, 15, 20];
+    const breakerSteps  = [10, 16, 20, 25, 32, 40, 50, 63, 80, 100, 125];
+
+    const el = (id) => document.getElementById(id);
+    const round2 = (n) => Math.round(n * 100) / 100;
+    const ceil = (n) => Math.ceil(n);
+
+    function pickInverter(kWpDC){
+      const target = kWpDC * 0.90;
+      let best = inverterSizes[0];
+      for (const s of inverterSizes){
+        if (s >= target){ best = s; break; }
+        best = s;
+      }
+      return best;
+    }
+
+    function pickBreaker(requiredA){
+      for (const b of breakerSteps){
+        if (b >= requiredA) return b;
+      }
+      return breakerSteps[breakerSteps.length - 1];
+    }
+
+    function sizeSystem(kWhMonth, hsp, offset, reserve, moduleWp){
+      const kWhTarget = kWhMonth * offset * (1 + reserve);
+      const kWpIdeal  = kWhTarget / (hsp * PR * 30);
+
+      const modules = Math.max(1, ceil((kWpIdeal * 1000) / moduleWp));
+      const kWpReal = (modules * moduleWp) / 1000;
+      const invkW   = pickInverter(kWpReal);
+
+      return { kWhTarget, kWpIdeal, modules, kWpReal, invkW };
+    }
+
+    function electricalChecks(invkW, voltage, cableMm2){
+      const invA = (invkW * 1000) / (voltage * PF);
+      const invBreaker = pickBreaker(invA * 1.25);
+
+      const ampacity = cableAmpacity[cableMm2] || 0;
+      const cableOk = ampacity >= (invA * 1.25);
+
+      let suggestedCable = cableMm2;
+      const neededA = invA * 1.25;
+      for (const [mm2, cap] of Object.entries(cableAmpacity)){
+        if (cap >= neededA){ suggestedCable = mm2; break; }
+      }
+
+      return { invA, invBreaker, ampacity, cableOk, suggestedCable };
+    }
+
+    function calc(){
+      const kWhMonth = parseFloat(el("kwhMonth").value || "0");
+      const offset   = parseFloat(el("offset").value);
+      const reserve  = parseFloat(el("reserve").value);
+      const hsp      = parseFloat(el("hsp").value);
+      const voltage  = parseFloat(el("voltage").value);
+      const mainBreaker = parseFloat(el("mainBreaker").value || "0");
+      const cable    = el("cable").value;
+      const client   = (el("clientName").value || "").trim();
+
+      if (!kWhMonth || kWhMonth <= 0){
+        alert("Informe o consumo mensal (kWh/mês).");
+        return;
+      }
+
+      const results = MODULES.map(wp => {
+        const s = sizeSystem(kWhMonth, hsp, offset, reserve, wp);
+        const e = electricalChecks(s.invkW, voltage, cable);
+        const warnMain = (mainBreaker && mainBreaker > 0 && e.invBreaker > mainBreaker)
+          ? "⚠️ Disjuntor AC sugerido ficou maior que o disjuntor geral informado — engenharia deve revisar padrão/entrada."
+          : "";
+        return { wp, ...s, ...e, warnMain };
+      });
+
+      const out = el("output");
+      out.style.display = "block";
+
+      const headerKpis = `
+        <div><span class="tag">Resultado</span></div>
+        <div class="kpi">
+          <div class="k"><div class="t">Consumo informado</div><div class="v">${round2(kWhMonth)} kWh/mês</div></div>
+          <div class="k"><div class="t">Meta de compensação</div><div class="v">${round2(kWhMonth * offset)} kWh/mês</div></div>
+          <div class="k"><div class="t">HSP escolhida</div><div class="v">${hsp} h/dia</div></div>
+          <div class="k"><div class="t">Rede / Entrada</div><div class="v">${voltage} V • ${mainBreaker ? mainBreaker + " A" : "—"}</div></div>
+        </div>
+      `;
+
+      const cards = results.map(r => `
+        <div>
+          <h3>Opção com placas de <b>${r.wp} Wp</b></h3>
+          <div class="line"><b>Sistema (DC):</b> ${round2(r.kWpReal)} kWp (${r.modules} placas)</div>
+          <div class="line"><b>Inversor sugerido (AC):</b> ${r.invkW} kW</div>
+          <div class="line"><b>Corrente AC aprox.:</b> ${round2(r.invA)} A em ${voltage} V</div>
+          <div class="line"><b>Disjuntor AC (sugestão):</b> ${r.invBreaker} A</div>
+          <div class="line"><b>Bitola atual:</b> ${cable} mm² (${r.ampacity} A aprox.) —
+            <span class="${r.cableOk ? "ok" : "bad"}">${r.cableOk ? "OK (pré-checagem)" : "Pode ser insuficiente"}</span>
+          </div>
+          <div class="line"><b>Bitola mínima sugerida (por corrente):</b> ${r.suggestedCable} mm²</div>
+          ${r.warnMain ? `<div class="sub"><b>${r.warnMain}</b></div>` : `<div class="sub">✅ Sem alerta óbvio com o disjuntor geral informado.</div>`}
+          <div class="sub">Obs.: Quantidade de placas muda (telhado). A engenharia valida strings, distância e padrão da concessionária.</div>
+        </div>
+      `).join("");
+
+      out.innerHTML = `
+        ${headerKpis}
+        <div class="pill">${cards}</div>
+        <div class="copyRow" style="margin-top:12px;">
+          <textarea id="waText" readonly></textarea>
+        </div>
+      `;
+
+      const r700 = results.find(x => x.wp === 700);
+      const r600 = results.find(x => x.wp === 600);
+
+      const text =
+`${client ? `Olá, ${client}! ` : "Olá! "}
+Segue pré-sugestão da Rinnovare (base: consumo ${round2(kWhMonth)} kWh/mês, alvo ${Math.round(offset*100)}%, HSP ${hsp}h/dia, reserva ${Math.round(reserve*100)}%, rede ${voltage}V).
+
+✅ Opção A — Placas 700 Wp:
+• ${r700.modules} placas (total ${round2(r700.kWpReal)} kWp DC)
+• Inversor: ${r700.invkW} kW | Disjuntor AC: ${r700.invBreaker} A
+• Bitola atual: ${cable} mm² (${r700.cableOk ? "OK pré-checagem" : "pode precisar reforço"}) → sugerida: ${r700.suggestedCable} mm²
+
+✅ Opção B — Placas 600 Wp:
+• ${r600.modules} placas (total ${round2(r600.kWpReal)} kWp DC)
+• Inversor: ${r600.invkW} kW | Disjuntor AC: ${r600.invBreaker} A
+• Bitola atual: ${cable} mm² (${r600.cableOk ? "OK pré-checagem" : "pode precisar reforço"}) → sugerida: ${r600.suggestedCable} mm²
+
+Observação: pré-dimensionamento comercial; a engenharia confirma layout do telhado, strings e padrão da concessionária.`;
+
+      document.getElementById("waText").value = text;
+
+      el("copyBtn").style.display = "inline-block";
+      el("copyBtn").onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(document.getElementById("waText").value);
+          el("copyBtn").textContent = "Copiado ✅";
+          setTimeout(() => el("copyBtn").textContent = "Copiar texto WhatsApp", 1200);
+        } catch {
+          alert("Não consegui copiar automaticamente. Selecione o texto e copie manualmente.");
+        }
+      };
+    }
+
+    el("calcBtn").addEventListener("click", calc);
+
+    el("clearBtn").addEventListener("click", () => {
+      ["kwhMonth","mainBreaker","clientName"].forEach(id => el(id).value = "");
+      el("offset").value = "1.00";
+      el("reserve").value = "0.00";
+      el("hsp").value = "4.5";
+      el("voltage").value = "220";
+      el("cable").value = "6";
+      el("output").style.display = "none";
+      el("output").innerHTML = "";
+      el("copyBtn").style.display = "none";
+      el("copyBtn").textContent = "Copiar texto WhatsApp";
+    });
+  </script>
+</body>
+</html>
